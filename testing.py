@@ -1,4 +1,3 @@
-pip install opencv-python
 import cv2
 
 # Load the input images
