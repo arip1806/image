@@ -1,8 +1,8 @@
 import cv2
 
 # Load the input images
-image1 = cv2.imread('amit.jpg')
-image2 = cv2.imread('modi1.jpg')
+image1 = cv2.imread('lion.jpg')
+image2 = cv2.imread('tiger.jpg')
 
 # Load the pre-trained face detection classifier
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
