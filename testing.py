@@ -1,36 +1,41 @@
-import cv2
+def rgb_fft(image):
+    f_size = 25
+    fft_images=[]
+    fft_images_log = []
+    for i in range(3):
+        rgb_fft = np.fft.fftshift(np.fft.fft2((image[:, :, i])))
+        fft_images.append(rgb_fft)
+        fft_images_log.append(np.log(abs(rgb_fft)))
+    
+    return fft_images, fft_images_log
+    def apply_mask(input_image, mask): 
+    _, mask_thresh = cv2.threshold(mask, 120, 255, cv2.THRESH_BINARY)
+    mask_bool = mask_thresh.astype('bool')
+    input_image[mask_bool] = 1
+    
+    return input_image 
 
-# Load the input images
-image1 = cv2.imread('lion.jpg')
-image2 = cv2.imread('tiger.jpg')
 
-# Load the pre-trained face detection classifier
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+def apply_mask_all(list_images, list_mask): 
+    final_result = []
+    
+    for (i,mask) in zip(list_images, list_mask):
+        result = apply_mask(i,mask)
+        final_result.append(result)
+    return final_result
+    def create_canvas_draw_instance(background_image, key, height, width): 
 
-# Detect faces in the images
-faces = face_cascade.detectMultiScale(image1)
-faces1 = face_cascade.detectMultiScale(image2)
+    canvas_result = st_canvas(
+        fill_color="rgba(255, 165, 0, 0)",  
+        stroke_width=stroke_width,
+        stroke_color=stroke_color,
+        background_color=bg_color,
+        background_image=Image.open(background_image),
+        update_streamlit=realtime_update,
+        drawing_mode=drawing_mode,
+        height = height, 
+        width = width,
+        key=key,
+    )
 
-if len(faces) > 0:
-    for (x, y, w, h) in faces:
-        # Crop the face region from the first image
-        cropped_face = image1[y:y+h, x:x+w]
-
-        # Calculate dimensions for resizing the face from the second image
-        desired_width = faces1[0][0] + faces1[0][2]
-        desired_height = faces1[0][1] + faces1[0][3]
-
-        # Resize the cropped face to match dimensions
-        resized_cropped_face = cv2.resize(cropped_face, (desired_width, desired_height))
-
-        # Position the resized face on the first image
-        x_position = x
-        y_position = y
-        image1[y_position:y_position+desired_height, x_position:x_position+desired_width] = resized_cropped_face
-
-    # Display the result
-    cv2.imshow('Result', image1)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-else:
-    print("No faces found in the first image.")
+    return canvas_result
