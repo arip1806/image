@@ -8,8 +8,7 @@ def rgb_fft(image):
         fft_images_log.append(np.log(abs(rgb_fft)))
     
     return fft_images, fft_images_log
-    def apply_mask(input_image, mask): 
-    _, mask_thresh = cv2.threshold(mask, 120, 255, cv2.THRESH_BINARY)
+    def apply_mask(input_image, mask): _, mask_thresh = cv2.threshold(mask, 120, 255, cv2.THRESH_BINARY)
     mask_bool = mask_thresh.astype('bool')
     input_image[mask_bool] = 1
     
